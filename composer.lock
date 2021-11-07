@@ -1,0 +1,61 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "87f0c17ac28efd9756959d6bd2d6848a",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "tutv95/wp-package-parser",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tutv95/wp-package-parser.git",
+                "reference": "ffd75857b24fc37efdfeae80f651f6896433ee93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tutv95/wp-package-parser/zipball/ffd75857b24fc37efdfeae80f651f6896433ee93",
+                "reference": "ffd75857b24fc37efdfeae80f651f6896433ee93",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "wp-package-parser.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Max",
+                    "email": "tutv95@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/tutv95/wp-package-parser/issues",
+                "source": "https://github.com/tutv95/wp-package-parser/tree/master"
+            },
+            "time": "2017-06-19T04:29:38+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}
