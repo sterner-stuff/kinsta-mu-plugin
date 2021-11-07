@@ -2,8 +2,8 @@ name: Updater
 
 # Run this workflow twice daily
 on: 
-  # schedule:
-  #   - cron: '0 */12 * * *'
+  schedule:
+    - cron: '0 */12 * * *'
   workflow_dispatch:
     inputs:
       name:
@@ -11,7 +11,7 @@ on:
         required: false
 
 env:
-  PACKAGE_SLUG: advanced-custom-fields-pro
+  PACKAGE_SLUG: kinsta-mu-plugins
 
 jobs:
   # Set the job key. The key is displayed as the job name
@@ -30,7 +30,7 @@ jobs:
 
       # Fetch latest version
       - name: Fetch
-        run: wget 'https://privateplugin.example&k=${{secrets.PLUGIN_KEY}}' -O package.zip
+        run: wget 'https://kinsta.com/kinsta-tools/kinsta-mu-plugins.zip' -O package.zip
 
       # PHP
       - name: 'Setup PHP'
