@@ -1,6 +1,6 @@
 {
-    "name": "plugin-author/plugin-name",
-    "type": "wordpress-plugin",
+    "name": "kinsta/kinsta-mu-plugins",
+    "type": "wordpress-muplugin",
     "authors": [
         {
             "name": "Ethan Clevenger",
