@@ -70,7 +70,7 @@ jobs:
       
       - name: rm
         if: ${{ steps.previous_version.outputs.tag != steps.new_version.outputs.new_version }}
-        run: rm package.zip && rm -rf ${{ env.PACKAGE_SLUG }}
+        run: rm package.zip
         
       - name: Commit
         if: ${{ steps.previous_version.outputs.tag != steps.new_version.outputs.new_version }}
