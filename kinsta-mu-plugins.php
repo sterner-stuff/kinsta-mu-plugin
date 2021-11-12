@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die( 'No script kiddies please!' );
 }
 
-define( 'KINSTAMU_VERSION', '2.3.7' );
+define( 'KINSTAMU_VERSION', '2.3.7.2' );
 if ( ! defined( 'KINSTAMU_WHITELABEL' ) ) {
 	define( 'KINSTAMU_WHITELABEL', false );
 }
