@@ -37,7 +37,6 @@ $default_settings = array(
 	),
 );
 
-global $kinsta_cache;
 $kinsta_cache = new Cache( $config, $default_settings );
 
 /**

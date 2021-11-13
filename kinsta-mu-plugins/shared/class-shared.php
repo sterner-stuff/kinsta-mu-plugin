@@ -192,14 +192,13 @@ class Shared {
 	 * @return string URL path of the kinsta-mu-plugins.
 	 */
 	public static function shared_resource_url( $path = '' ) {
-		// $mu_url = ( is_ssl() ) ? str_replace( 'http://', 'https://', WPMU_PLUGIN_URL ) : WPMU_PLUGIN_URL;
-		// $full_path = $mu_url . '/kinsta-mu-plugins/' . $path;
+		$mu_url = ( is_ssl() ) ? str_replace( 'http://', 'https://', WPMU_PLUGIN_URL ) : WPMU_PLUGIN_URL;
+		$full_path = $mu_url . '/kinsta-mu-plugins/' . $path;
 
-		// if ( defined( 'KINSTAMU_CUSTOM_MUPLUGIN_URL' ) && KINSTAMU_CUSTOM_MUPLUGIN_URL !== '' ) {
-		// 	$full_path = KINSTAMU_CUSTOM_MUPLUGIN_URL . '/kinsta-mu-plugins/' . $path;
-		// }
-		
-		$full_path = plugin_dir_url(__FILE__) . '../' . $path;
+		if ( defined( 'KINSTAMU_CUSTOM_MUPLUGIN_URL' ) && KINSTAMU_CUSTOM_MUPLUGIN_URL !== '' ) {
+			$full_path = KINSTAMU_CUSTOM_MUPLUGIN_URL . '/kinsta-mu-plugins/' . $path;
+		}
+
 		return $full_path;
 	}
 
