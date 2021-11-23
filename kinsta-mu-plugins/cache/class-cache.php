@@ -252,8 +252,14 @@ class Cache {
 
 		check_ajax_referer( 'kinsta-clear-cache-all', 'kinsta_nonce' );
 		$this->kinsta_cache_purge->purge_complete_caches();
-		if ( isset( $_GET ) && isset( $_GET['source'] ) && 'adminbar' == $_GET['source'] ) { // WPCS: loose comparison ok.
-			header( 'Location: ' . add_query_arg( 'kinsta-cache-cleared', 'true', $_SERVER['HTTP_REFERER'] ) );
+		if ( ! empty( $_GET['source'] ) && 'adminbar' === $_GET['source'] ) {
+			// Check if referrer exists and setup fallback
+			$redirect_url = add_query_arg( 'kinsta-cache-cleared', 'true', admin_url() );
+			if ( ! empty( $_GET['redirect_url'] ) ) {
+				$redirect_url_decode = urldecode( $_GET['redirect_url'] );
+				$redirect_url = wp_http_validate_url( $redirect_url_decode ) ? add_query_arg( 'kinsta-cache-cleared', 'true', $redirect_url_decode ) : $redirect_url;
+			}
+			wp_safe_redirect( $redirect_url );
 		}
 		die();
 	}
@@ -267,8 +273,14 @@ class Cache {
 
 		check_ajax_referer( 'kinsta-clear-cache-full-page', 'kinsta_nonce' );
 		$this->kinsta_cache_purge->purge_complete_full_page_cache();
-		if ( isset( $_GET ) && isset( $_GET['source'] ) && 'adminbar' == $_GET['source'] ) { // WPCS: CSRF ok, loose comparison ok.
-			header( 'Location: ' . add_query_arg( 'kinsta-cache-cleared', 'true', $_SERVER['HTTP_REFERER'] ) );
+		if ( ! empty( $_GET['source'] ) && 'adminbar' === $_GET['source'] ) {
+			// Check if referrer exists and setup fallback
+			$redirect_url = add_query_arg( 'kinsta-cache-cleared', 'true', admin_url() );
+			if ( ! empty( $_GET['redirect_url'] ) ) {
+				$redirect_url_decode = urldecode( $_GET['redirect_url'] );
+				$redirect_url = wp_http_validate_url( $redirect_url_decode ) ? add_query_arg( 'kinsta-cache-cleared', 'true', $redirect_url_decode ) : $redirect_url;
+			}
+			wp_safe_redirect( $redirect_url );
 		}
 		die();
 	}
@@ -282,8 +294,14 @@ class Cache {
 
 		check_ajax_referer( 'kinsta-clear-cache-object', 'kinsta_nonce' );
 		$this->kinsta_cache_purge->purge_complete_object_cache();
-		if ( 'adminbar' == $_GET['source'] ) { // WPCS: CSRF ok, loose comparison ok.
-			header( 'Location: ' . add_query_arg( 'kinsta-cache-cleared', 'true', $_SERVER['HTTP_REFERER'] ) );
+		if ( ! empty( $_GET['source'] ) && 'adminbar' === $_GET['source'] ) {
+			// Check if referrer exists and setup fallback
+			$redirect_url = add_query_arg( 'kinsta-cache-cleared', 'true', admin_url() );
+			if ( ! empty( $_GET['redirect_url'] ) ) {
+				$redirect_url_decode = urldecode( $_GET['redirect_url'] );
+				$redirect_url = wp_http_validate_url( $redirect_url_decode ) ? add_query_arg( 'kinsta-cache-cleared', 'true', $redirect_url_decode ) : $redirect_url;
+			}
+			wp_safe_redirect( $redirect_url );
 		}
 		die();
 	}
