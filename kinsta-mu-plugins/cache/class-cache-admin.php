@@ -89,7 +89,7 @@ class Cache_Admin {
 		if ( empty( $_SERVER['REQUEST_URI'] ) || ! is_string( $_SERVER['REQUEST_URI'] ) ) {
 			return get_site_url();
 		}
-		$url = get_site_url( null, $_SERVER['REQUEST_URI'] );
+		$url = network_site_url( $_SERVER['REQUEST_URI'] );
 		if ( ! wp_http_validate_url( $url ) ) {
 			return get_site_url();
 		}
