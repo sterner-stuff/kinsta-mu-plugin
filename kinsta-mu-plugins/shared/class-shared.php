@@ -32,7 +32,7 @@ class Shared {
 		add_action( 'admin_body_class', array( $this, 'body_classes' ) );
 
 		if ( KINSTAMU_WHITELABEL === false ) {
-			add_filter( 'admin_footer_text', [ $this, 'modify_admin_footer_text' ], 99 );
+			add_filter( 'admin_footer_text', array( $this, 'modify_admin_footer_text' ), 99 );
 		}
 	}
 

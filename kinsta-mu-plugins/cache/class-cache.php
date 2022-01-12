@@ -46,7 +46,7 @@ class Cache {
 	 *
 	 * @var Cache_Purge
 	 */
-	public $KinstaCachePurge; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.MemberNotSnakeCase
+	public $KinstaCachePurge; // phpcs:ignore
 
 	/**
 	 * The cache configuration
@@ -118,8 +118,7 @@ class Cache {
 		$this->kinsta_cache_purge = new Cache_Purge( $this );
 		$this->kinsta_cache_admin = new Cache_Admin( $this );
 
-		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
-		$this->KinstaCachePurge = $this->kinsta_cache_purge;
+		$this->KinstaCachePurge = $this->kinsta_cache_purge; // phpcs:ignore
 
 		do_action( 'kinsta_cache_init', $this );
 	}
