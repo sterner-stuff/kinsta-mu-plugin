@@ -155,7 +155,7 @@ class Cache_Purge {
 		}
 
 		// Clear cache when the post updated, and only when it's already / still published.
-		if ( $update === true && 'publish' === get_post_status( $post_id ) ) {
+		if ( true === $update && 'publish' === get_post_status( $post_id ) ) {
 			$this->purge_single_happened = true;
 			$this->initiate_purge( $post_id, 'post' );
 		}
@@ -360,11 +360,9 @@ class Cache_Purge {
 
 		/**
 		 * Filters applied.
-		 *
-		 * TODO Rewrite the filter name to follow WordPress standard, and remove the rule exclusion in the phpcs.xml.
 		 */
-		$purge_request['immediate'] = apply_filters( 'KinstaCache/purgeImmediate', $purge_request['immediate'] );
-		$purge_request['throttled'] = apply_filters( 'KinstaCache/purgeThrottled', $purge_request['throttled'] );
+		$purge_request['immediate'] = apply_filters( 'KinstaCache/purgeImmediate', $purge_request['immediate'] ); // phpcs:ignore
+		$purge_request['throttled'] = apply_filters( 'KinstaCache/purgeThrottled', $purge_request['throttled'] ); // phpcs:ignore
 
 		$result['requests'] = $purge_request;
 
@@ -454,10 +452,9 @@ class Cache_Purge {
 			}
 		}
 
-		$time = strtotime( $post->post_date );
-		$year = date( 'Y', $time );
-		$month = date( 'm', $time );
-		$day = date( 'd', $time );
+		$year = get_the_date( 'Y', $post );
+		$month = get_the_date( 'm', $post );
+		$day = get_the_date( 'd', $post );
 
 		$purge['single']['year'] = get_year_link( $year );
 		$purge['single']['month'] = get_month_link( $year, $month );
