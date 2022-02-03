@@ -79,24 +79,6 @@ class Cache_Admin {
 	}
 
 	/**
-	 * Try to build a reliable referrer to send the user back to where they came from.
-	 *
-	 * @since 2.3.9
-	 *
-	 * @return string
-	 */
-	public function get_referrer_url() {
-		if ( empty( $_SERVER['REQUEST_URI'] ) || ! is_string( $_SERVER['REQUEST_URI'] ) ) {
-			return get_site_url();
-		}
-		$url = network_site_url( $_SERVER['REQUEST_URI'] );
-		if ( ! wp_http_validate_url( $url ) ) {
-			return get_site_url();
-		}
-		return $url;
-	}
-
-	/**
 	 * Add Admin bar menu
 	 *
 	 * @param  object $wp_admin_bar WP_Admin_Bar object.
@@ -106,8 +88,6 @@ class Cache_Admin {
 		if ( ! current_user_can( $this->view_role_or_capability ) ) {
 			return;
 		}
-
-		$referrer_url = urlencode( $this->get_referrer_url() );
 
 		if ( $this->kinsta_cache->has_object_cache ) {
 
@@ -127,7 +107,7 @@ class Cache_Admin {
 				array(
 					'id' => 'kinsta-cache-all',
 					'title' => 'Clear All Caches',
-					'href' => wp_nonce_url( admin_url( 'admin-ajax.php?action=kinsta_clear_cache_all&source=adminbar&redirect_url=' . $referrer_url ), 'kinsta-clear-cache-all', 'kinsta_nonce' ),
+					'href' => wp_nonce_url( admin_url( 'admin.php?page=kinsta-tools&clear-cache=kinsta-clear-cache-all' ), 'kinsta-clear-cache-admin-bar', 'kinsta_nonce' ),
 					'parent' => 'kinsta-cache',
 				)
 			);
@@ -136,7 +116,7 @@ class Cache_Admin {
 				array(
 					'id' => 'kinsta-cache-full-page',
 					'title' => 'Clear Full Page Cache',
-					'href' => wp_nonce_url( admin_url( 'admin-ajax.php?action=kinsta_clear_cache_full_page&source=adminbar&redirect_url=' . $referrer_url ), 'kinsta-clear-cache-full-page', 'kinsta_nonce' ),
+					'href' => wp_nonce_url( admin_url( 'admin.php?page=kinsta-tools&clear-cache=kinsta-clear-cache-full-page' ), 'kinsta-clear-cache-admin-bar', 'kinsta_nonce' ),
 					'parent' => 'kinsta-cache',
 				)
 			);
@@ -145,7 +125,7 @@ class Cache_Admin {
 				array(
 					'id' => 'kinsta-cache-object',
 					'title' => 'Clear Object Cache',
-					'href' => wp_nonce_url( admin_url( 'admin-ajax.php?action=kinsta_clear_cache_object&source=adminbar&redirect_url=' . $referrer_url ), 'kinsta-clear-cache-object', 'kinsta_nonce' ),
+					'href' => wp_nonce_url( admin_url( 'admin.php?page=kinsta-tools&clear-cache=kinsta-clear-cache-object' ), 'kinsta-clear-cache-admin-bar', 'kinsta_nonce' ),
 					'parent' => 'kinsta-cache',
 				)
 			);
@@ -154,7 +134,7 @@ class Cache_Admin {
 				array(
 					'id' => 'kinsta-cache',
 					'title' => __( 'Clear Cache', 'kinsta-mu-plugins' ),
-					'href' => wp_nonce_url( admin_url( 'admin-ajax.php?action=kinsta_clear_cache_full_page&source=adminbar&redirect_url=' . $referrer_url ), 'kinsta-clear-cache-full-page', 'kinsta_nonce' ),
+					'href' => wp_nonce_url( admin_url( 'admin.php?page=kinsta-tools&clear-cache=kinsta-clear-cache-full-page' ), 'kinsta-clear-cache-admin-bar', 'kinsta_nonce' ),
 					'meta' => array( 'title' => __( 'Clear Cache', 'kinsta-mu-plugins' ) ),
 					'parent' => 'top-secondary',
 				)

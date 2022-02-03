@@ -35,6 +35,7 @@ $default_settings = array(
 			'single' => array(),
 		),
 	),
+	'rules' => array(),
 );
 
 $kinsta_cache = new Cache( $config, $default_settings );
