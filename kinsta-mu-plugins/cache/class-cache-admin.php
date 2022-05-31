@@ -63,6 +63,9 @@ class Cache_Admin {
 	 * Add main Kinsta Tools menu item.
 	 */
 	public function admin_menu_item() {
+		if ( apply_filters( 'kinsta_admin_disabled', false ) ) {
+			return;
+		}
 
 		$icon = ( KINSTAMU_WHITELABEL === false ) ? 'none' : 'dashicons-admin-generic';
 		$title = ( KINSTAMU_WHITELABEL === false ) ? __( 'Kinsta Cache', 'kinsta-mu-plugins' ) : __( 'Cache Settings', 'kinsta-mu-plugins' );
@@ -85,7 +88,7 @@ class Cache_Admin {
 	 * @return void
 	 */
 	public function admin_bar_item( $wp_admin_bar ) {
-		if ( ! current_user_can( $this->view_role_or_capability ) ) {
+		if ( apply_filters( 'kinsta_admin_disabled', false ) || ! current_user_can( $this->view_role_or_capability ) ) {
 			return;
 		}
 

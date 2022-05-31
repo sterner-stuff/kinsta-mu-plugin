@@ -267,6 +267,7 @@ class Cache_Purge {
 	public function purge_complete_caches() {
 		$this->purge_complete_object_cache();
 		$this->purge_complete_full_page_cache();
+		do_action( 'kinsta_purge_complete_caches_happened' );
 	}
 
 	/**
@@ -288,6 +289,10 @@ class Cache_Purge {
 		$result['time']['start'] = microtime( true );
 
 		$post = get_post( $post_id );
+
+		if ( false === is_post_type_viewable( $post->post_type ) ) {
+			return;
+		}
 
 		$archives = $this->get_post_archives_list( $post );
 
@@ -403,6 +408,8 @@ class Cache_Purge {
 				'body' => $purge_request['throttled'],
 			)
 		);
+
+		do_action( 'kinsta_initiate_purge_happened' );
 
 		$result['time']['end'] = microtime( true );
 
