@@ -3,6 +3,8 @@
  * Class that customizes WP for better support for Kinsta.
  *
  * @since 2.4.6
+ * @package KinstaMUPlugins
+ * @subpackage Compat
  */
 
 namespace Kinsta\Compat;
@@ -11,9 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die( 'No script kiddies please!' );
 }
 
+/**
+ * Class that customizes WP for better support for Kinsta.
+ */
 class WP_Kinsta {
 
-	// Class constructor.
+	/**
+	 * Class constructor.
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		// Is mobile?
 		add_filter( 'wp_is_mobile', array( $this, 'detect_if_mobile' ) );
