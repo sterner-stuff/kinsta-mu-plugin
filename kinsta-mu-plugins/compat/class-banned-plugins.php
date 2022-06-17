@@ -42,7 +42,7 @@ class Banned_Plugins {
 		'loginwall/loginwall.php',
 		'wp-rss-multi-importer/wp-rss-multi-importer.php',
 		'wp-db-backup-made/wpa-wp.php',
-		'duplicator-pro/duplicator-pro.php', // Duplicator Pro
+		'duplicator-pro/duplicator-pro.php', // Duplicator Pro.
 	);
 
 	/**
