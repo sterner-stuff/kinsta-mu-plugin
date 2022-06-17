@@ -21,6 +21,8 @@ if ( ! defined( 'KINSTAMU_WHITELABEL' ) ) {
 	define( 'KINSTAMU_WHITELABEL', false );
 }
 
+define('KINSTAMU_CUSTOM_MUPLUGIN_URL', WPMU_PLUGIN_URL . '/kinsta-mu-plugins/');
+
 require_once plugin_dir_path( __FILE__ ) . 'kinsta-mu-plugins/shared/class-shared.php';
 require_once plugin_dir_path( __FILE__ ) . 'kinsta-mu-plugins/compat/compat.php';
 require_once plugin_dir_path( __FILE__ ) . 'kinsta-mu-plugins/cache/cache.php';
