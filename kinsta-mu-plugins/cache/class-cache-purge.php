@@ -279,6 +279,9 @@ class Cache_Purge {
 	 * @return void
 	 */
 	public function purge_complete_caches() {
+		if ( defined( 'KINSTAMU_DISABLE_AUTOPURGE' ) && KINSTAMU_DISABLE_AUTOPURGE === true ) {
+			return;
+		}
 		$this->purge_complete_object_cache();
 		$this->purge_complete_full_page_cache();
 
@@ -297,8 +300,6 @@ class Cache_Purge {
 		if ( defined( 'KINSTAMU_DISABLE_AUTOPURGE' ) && KINSTAMU_DISABLE_AUTOPURGE === true ) {
 			return false;
 		}
-
-		$result['time']['start'] = microtime( true );
 
 		$post = get_post( $post_id );
 		if ( false === is_post_type_viewable( $post->post_type ) ) {
@@ -389,39 +390,57 @@ class Cache_Purge {
 
 		$result['requests'] = $purge_request;
 
-		if ( defined( 'KINSTA_CACHE_DEBUG' ) && KINSTA_CACHE_DEBUG === true ) {
-			echo '<pre>';
-			print_r( $purge_request );
-			echo '</pre>';
-			exit();
-		}
+		$is_cache_debug = ( defined( 'KINSTA_CACHE_DEBUG' ) ) ? KINSTA_CACHE_DEBUG : false;
 
-		$result['time']['sendrequest'] = microtime( true );
-
-		$result['response']['immediate'] = wp_remote_post(
-			$this->kinsta_cache->config['immediate_path'],
-			array(
-				'sslverify' => false,
-				'timeout' => 5,
-				'body' => $purge_request['immediate'],
-			)
-		);
-
-		$result['response']['throttled'] = wp_remote_post(
-			$this->kinsta_cache->config['throttled_path'],
-			array(
-				'sslverify' => false,
-				'timeout' => 5,
-				'body' => $purge_request['throttled'],
-			)
+		$result['response'] = array(
+			'immediate' => $this->send_cache_purge_request( $this->kinsta_cache->config['immediate_path'], $purge_request['immediate'] ),
+			'throttled' => $this->send_cache_purge_request( $this->kinsta_cache->config['throttled_path'], $purge_request['throttled'] ),
 		);
 
 		// Hook that fires after specific event purges cache.
 		do_action( 'kinsta_initiate_purge_happened' );
 
-		$result['time']['end'] = microtime( true );
-
+		if ( $is_cache_debug ) {
+			echo '<pre>';
+			print_r( $purge_request );
+			var_dump( $result['response'] );
+			echo '</pre>';
+			exit();
+		}
 		return $result;
+	}
+
+	/**
+	 * Send POST request to cache endpoint. Returns array of curl information
+	 *
+	 * @param string $endpoint_url Endpoint to send purge list to.
+	 * @param array  $post_body URLs to send.
+	 *
+	 * @return array
+	 */
+	public function send_cache_purge_request( $endpoint_url, $post_body ) {
+		$cache_purge_timeout = ( defined( 'KINSTAMU_CACHE_PURGE_TIMEOUT' ) ) ? (int) KINSTAMU_CACHE_PURGE_TIMEOUT : 5;
+		$response_data = array(
+			'response_code' => 0,
+			'error_code' => 0,
+			'response_body' => '',
+			'error_message' => '',
+		);
+
+		$post_request = curl_init( $endpoint_url );
+		curl_setopt( $post_request, CURLOPT_POST, true );
+		curl_setopt( $post_request, CURLOPT_POSTFIELDS, http_build_query( $post_body ) );
+		curl_setopt( $post_request, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $post_request, CURLOPT_SSL_VERIFYPEER, false );
+		curl_setopt( $post_request, CURLOPT_SSL_VERIFYHOST, false );
+		curl_setopt( $post_request, CURLOPT_CONNECTTIMEOUT, $cache_purge_timeout );
+		curl_setopt( $post_request, CURLOPT_TIMEOUT, $cache_purge_timeout );
+		$response_data['response_body'] = curl_exec( $post_request );
+		$response_data['error_code'] = curl_errno( $post_request );
+		$response_data['error_message'] = curl_error( $post_request );
+		$response_data['response_code'] = curl_getinfo( $post_request, CURLINFO_HTTP_CODE );
+		curl_close( $post_request );
+		return $response_data;
 	}
 
 	/**
