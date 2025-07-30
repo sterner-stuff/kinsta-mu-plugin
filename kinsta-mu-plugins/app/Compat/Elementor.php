@@ -2,6 +2,7 @@
 
 namespace Kinsta\KMP\Compat;
 
+use Kinsta\Cache_Purge;
 use Kinsta\KMP;
 
 class Elementor
@@ -30,6 +31,13 @@ class Elementor
 			return;
 		}
 
-		$this->kmp->kinsta_cache_purge->purge_complete_caches();
+        /**
+         * Ensure `kinsta_cache_purge` is an instance of `Cache_Purge` before clearing teh cache.
+         */
+        if (!($this->kmp->kinsta_cache_purge instanceof Cache_Purge)) {
+			return;
+		}
+
+        $this->kmp->kinsta_cache_purge->purge_complete_caches();
 	}
 }
