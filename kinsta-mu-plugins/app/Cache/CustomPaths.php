@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Kinsta\KMP\Cache;
 
 use function array_values;
