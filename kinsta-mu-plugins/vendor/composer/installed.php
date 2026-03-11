@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'kinsta/kinsta-mu-plugins',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '41fd1cddc7a8bab50f5529ea24a1ebc0d26bab8c',
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => '453c9389a2e490a9d5b1713c32811b297aee3602',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'kinsta/kinsta-mu-plugins' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '41fd1cddc7a8bab50f5529ea24a1ebc0d26bab8c',
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => '453c9389a2e490a9d5b1713c32811b297aee3602',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),

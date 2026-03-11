@@ -6,15 +6,19 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit2cf20ea723fd7bd08289a44f36742029
 {
+    public static $files = array (
+        'a85931c634369cf8d575431fc971d732' => __DIR__ . '/../../..' . '/kinsta-mu-plugins/inc/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
-        'K' => 
+        'K' =>
         array (
             'Kinsta\\KMP\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Kinsta\\KMP\\' => 
+        'Kinsta\\KMP\\' =>
         array (
             0 => __DIR__ . '/../../..' . '/kinsta-mu-plugins/app',
         ),

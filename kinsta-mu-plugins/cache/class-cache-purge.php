@@ -9,6 +9,8 @@
 
 namespace Kinsta;
 
+use function Kinsta\KMP\is_autopurge_enabled;
+
 if ( ! defined( 'ABSPATH' ) ) { // If this file is called directly.
 	die( 'No script kiddies please!' );
 }
@@ -307,9 +309,19 @@ class Cache_Purge {
 	/**
 	 * Purge object, cdn and site cache
 	 *
+     * @param bool $force (Optional) Whether to force the cache even if the global autopurge is disabled.
 	 * @return void
 	 */
-	public function purge_complete_caches() {
+	public function purge_complete_caches( $force = false ) {
+        /**
+         * Do not clear the cache if the global autopurge is disabled, unless `$force` is `true`.
+         *
+         * @see https://kinsta.atlassian.net/browse/KMP-285
+         */
+        if ( ! is_autopurge_enabled() && ! $force ) {
+            return;
+        }
+
 		if ( $this->purge_all_happened ) {
 			return;
 		}
@@ -330,9 +342,21 @@ class Cache_Purge {
 	 * @return array the result of the wp_remote_post action
 	 **/
 	public function initiate_purge( $post_id ) {
-		if ( ( defined( 'KINSTAMU_DISABLE_AUTOPURGE' ) && KINSTAMU_DISABLE_AUTOPURGE === true ) || get_option( 'kinsta-autopurge-status' ) === 'disabled' ) {
-			return false;
-		}
+		if ( ! is_autopurge_enabled() ) {
+            return;
+        }
+
+        $autopurge = get_option('kinsta_kmp_cache_autopurge');
+
+        /**
+         * If the post controller is disabled, do not proceed with the purge.
+         *
+         * @see kinsta-mu-plugins/app/Cache/Autopurge/WPPostController.php
+         * @todo Move this method to the `WPPostController`.
+         */
+        if (($autopurge['wp_post_controller'] ?? null) === false) {
+            return false;
+        }
 
 		$post = get_post( $post_id );
 		if ( false === is_post_type_viewable( $post->post_type ) ) {
@@ -450,7 +474,16 @@ class Cache_Purge {
 		$response_data['error_code'] = curl_errno( $post_request );
 		$response_data['error_message'] = curl_error( $post_request );
 		$response_data['response_code'] = curl_getinfo( $post_request, CURLINFO_HTTP_CODE );
-		curl_close( $post_request );
+
+        /**
+         * curl_close is deprecated in PHP 8.5.
+         *
+         * https://php.watch/versions/8.5/curl_close-curl_share_close-deprecated
+         */
+        if (PHP_VERSION_ID < 80500) {
+            curl_close( $post_request );
+        }
+
 		return $response_data;
 	}
 
@@ -530,7 +563,7 @@ class Cache_Purge {
 	public function action_kinsta_clear_all_cache() {
 		check_ajax_referer( 'kinsta-clear-all-cache', 'kinsta_nonce' );
 
-		$this->purge_complete_caches();
+		$this->purge_complete_caches( true );
 
 		die();
 	}
@@ -597,7 +630,7 @@ class Cache_Purge {
 		 * @see Kinsta\KMP_Admin::cleared_cache_notice
 		 */
 		if ( 'kinsta-clear-all-cache' === $clear_cache_type ) {
-			$this->purge_complete_caches();
+			$this->purge_complete_caches( true );
 			$query_vars['kinsta-cache-cleared'] = 'all-cache';
 		} elseif ( 'kinsta-clear-object-cache' === $clear_cache_type ) {
 			$this->purge_complete_object_cache();
@@ -638,7 +671,7 @@ class Cache_Purge {
 		check_admin_referer( 'kinsta-clear-cache-admin-bar', 'kinsta_nonce' );
 
 		if ( 'kinsta-clear-all-cache' === $_GET['clear-cache'] ) {
-			$this->purge_complete_caches();
+			$this->purge_complete_caches(true); // Force purge even if autopurge is disabled.
 		} elseif ( 'kinsta-clear-object-cache' === $_GET['clear-cache'] ) {
 			$this->purge_complete_object_cache();
 		} elseif ( 'kinsta-clear-site-cache' === $_GET['clear-cache'] ) {
