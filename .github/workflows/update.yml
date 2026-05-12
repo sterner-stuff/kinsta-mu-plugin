@@ -41,12 +41,12 @@ jobs:
       # Get current tag
       - name: 'Get Previous tag'
         id: previous_version
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        uses: "WyriHaximus/github-action-get-previous-tag@v2"
         
       # Get new version
       - name: 'Get version'
         id: new_version
-        run: echo "::set-output name=new_version::$(php .github/workflows/check.php)"
+        run: echo "new_version=$(php .github/workflows/check.php)" >> $GITHUB_OUTPUT
         
       - name: 'Git config'
         if: ${{ steps.previous_version.outputs.tag != steps.new_version.outputs.new_version }}
@@ -74,7 +74,7 @@ jobs:
         run: |
           git add .
           git commit -m '${{ steps.new_version.outputs.new_version }}'
-          echo "::set-output name=commit::$(git rev-parse HEAD)"
+          echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
     
       - name: Push
         if: ${{ steps.previous_version.outputs.tag != steps.new_version.outputs.new_version }}
